@@ -1,0 +1,352 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>beancount.parser &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="beancount.plugins" href="beancount.plugins.html" />
+    <link rel="prev" title="beancount.ops" href="beancount.ops.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-beancount.parser">
+<span id="beancount-parser"></span><h1>beancount.parser<a class="headerlink" href="#module-beancount.parser" title="Permalink to this headline">¶</a></h1>
+<p>Parser module for beancount input files.</p>
+<div class="section" id="module-beancount.parser._parser">
+<span id="beancount-parser-parser"></span><h2>beancount.parser._parser<a class="headerlink" href="#module-beancount.parser._parser" title="Permalink to this headline">¶</a></h2>
+<p>Beancount parser extension module</p>
+</div>
+<div class="section" id="module-beancount.parser.booking">
+<span id="beancount-parser-booking"></span><h2>beancount.parser.booking<a class="headerlink" href="#module-beancount.parser.booking" title="Permalink to this headline">¶</a></h2>
+<p>Algorithms for ‘booking’ inventory, that is, the process of finding a
+matching lot when reducing the content of an inventory.</p>
+</div>
+<div class="section" id="module-beancount.parser.booking_full">
+<span id="beancount-parser-booking-full"></span><h2>beancount.parser.booking_full<a class="headerlink" href="#module-beancount.parser.booking_full" title="Permalink to this headline">¶</a></h2>
+<p>Full (new) booking implementation.</p>
+<p>Problem description:</p>
+<p>Interpolation and booking feed on each other, that is, numbers filled in from
+interpolation might affect the booking process, and numbers derived from the
+booking process may help carry out interpolation that would otherwise be
+under-defined. Here’s an example of interpolation helping the booking process:</p>
+<p>Assume the ante-inventory of Assets:Investments contains two lots of shares of
+HOOL, one at 100.00 USD and the other at 101.00 USD and apply this transaction:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>2015-09-30 *</dt><dd><p>Assets:Investments   -10 HOOL {USD}
+Assets:Cash               1000 USD
+Income:Gains              -200 USD</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Interpolation is unambiguously able to back out a cost of 100 USD / HOOL, which
+would then result in an unambiguous booking result.</p>
+<p>On the other hand, consider this transaction:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>2015-09-30 *</dt><dd><p>Assets:Investments    -10 HOOL {USD}
+Assets:Cash               1000 USD
+Income:Gains</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Now the interpolation cannot succeed. If the Assets:Investments account is
+configured to use the FIFO method, the 10 oldest shares would be selected for
+the cost, and we could then interpolate the capital gains correctly.</p>
+<p>First observation: The second case is much more frequent than the first, and the
+first is easily resolved manually by requiring a particular cost be specified.
+Moreover, in many cases there isn’t just a single lot of shares to be reduced
+from and figuring out the correct set of shares given a target cost is an
+underspecified problem.</p>
+<p>Second observation: Booking can only be achieved for inventory reductions, not
+for augmentations. Therefore, we should carry out booking on inventory
+reductions and fail early if reduction is undefined there, and leave inventory
+augmentations with missing numbers undefined, so that interpolation can fill
+them in at a later stage.</p>
+<p>Note that one case we’d like to but may not be able to handle is of a reduction
+with interpolated price, like this:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>2015-09-30 *</dt><dd><p>Assets:Investments        -10 HOOL {100.00 # USD}
+Expenses:Commission      9.95 USD
+Assets:Cash            990.05 USD</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Therefore we choose to</p>
+<ol class="arabic simple">
+<li><p>Carry out booking first, on inventory reductions only, and leave inventory
+augmentations as they are, possibly undefined. The ‘cost’ attributed of
+booked postings are converted from CostSpec to Cost. Augmented postings with
+missing amounts are left as CostSpec instances in order to allow for
+interpolation of total vs. per-unit amount.</p></li>
+<li><p>Compute interpolations on the resulting postings. Undefined costs for
+inventory augmentations may be filled in by interpolations at this stage (if
+possible).</p></li>
+<li><p>Finally, convert the interpolated CostSpec instances to Cost instances.</p></li>
+</ol>
+<p>Improving on this algorithm would require running a loop over the booking and
+interpolation steps until all numbers are resolved or no more inference can
+occur. We may consider that for later, as an experimental feature. My hunch is
+that there are so few cases for which this would be useful that we won’t bother
+improving on the algorithm above.</p>
+</div>
+<div class="section" id="module-beancount.parser.booking_method">
+<span id="beancount-parser-booking-method"></span><h2>beancount.parser.booking_method<a class="headerlink" href="#module-beancount.parser.booking_method" title="Permalink to this headline">¶</a></h2>
+<p>Implementations of all the particular booking methods.
+This code is used by the full booking algorithm.</p>
+</div>
+<div class="section" id="module-beancount.parser.cmptest">
+<span id="beancount-parser-cmptest"></span><h2>beancount.parser.cmptest<a class="headerlink" href="#module-beancount.parser.cmptest" title="Permalink to this headline">¶</a></h2>
+<p>Support utillities for testing scripts.</p>
+</div>
+<div class="section" id="module-beancount.parser.grammar">
+<span id="beancount-parser-grammar"></span><h2>beancount.parser.grammar<a class="headerlink" href="#module-beancount.parser.grammar" title="Permalink to this headline">¶</a></h2>
+<p>Builder for Beancount grammar.</p>
+</div>
+<div class="section" id="module-beancount.parser.hashsrc">
+<span id="beancount-parser-hashsrc"></span><h2>beancount.parser.hashsrc<a class="headerlink" href="#module-beancount.parser.hashsrc" title="Permalink to this headline">¶</a></h2>
+<p>Compute a hash of the source files in order to warn when the source goes out of date.</p>
+</div>
+<div class="section" id="module-beancount.parser.lexer">
+<span id="beancount-parser-lexer"></span><h2>beancount.parser.lexer<a class="headerlink" href="#module-beancount.parser.lexer" title="Permalink to this headline">¶</a></h2>
+<p>Beancount syntax lexer.</p>
+</div>
+<div class="section" id="module-beancount.parser.options">
+<span id="beancount-parser-options"></span><h2>beancount.parser.options<a class="headerlink" href="#module-beancount.parser.options" title="Permalink to this headline">¶</a></h2>
+<p>Declaration of options and their default values.</p>
+</div>
+<div class="section" id="module-beancount.parser.parser">
+<span id="id1"></span><h2>beancount.parser.parser<a class="headerlink" href="#module-beancount.parser.parser" title="Permalink to this headline">¶</a></h2>
+<p>Beancount syntax parser.</p>
+<p>IMPORTANT: The parser (and its grammar builder) produces “incomplete”
+Transaction objects. This means that some of the data can be found missing from
+the output of the parser and some of the data types vary slightly. Missing
+components are replaced not by None, but by a special constant ‘NA’ which helps
+diagnose problems if a user inadvertently attempts to work on an incomplete
+posting instead of a complete one. Those incomplete entries are then run through
+the “booking” routines which do two things simultaneously:</p>
+<ol class="arabic simple">
+<li><p>They find matching lots for reducing inventory positions, and</p></li>
+<li><p>They interpolate missing numbers.</p></li>
+</ol>
+<p>In doing so they normalize the entries to “complete” entries by converting a
+position/lot’s “cost” attribute from a CostSpec to a Cost. A Cost is similar to
+an Amount in that it shares “number” and “currency” attributes, but also has a
+label and a lot date. A CostSpec is similar to a Cost, but has all optional
+data; it consists in a specification for matching against a particular inventory
+lot.</p>
+<p>Other parts of a posting may also be missing, not just parts of the cost.
+Leaving out some parts of the input is used to invoke interpolation, to tell
+Beancount to automatically compute the missing numbers (if possible).</p>
+<p>Missing components will be set to the special value
+“beancount.core.number.MISSING” until inventory booking and number interpolation
+has been completed. The “MISSING” value should never appear in completed, loaded
+transaction postings.</p>
+<p>For instance, all of the units may be missing:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account
+posting.units = MISSING</p>
+</div></blockquote>
+<p>Or just the number of the units:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account                    USD
+posting.units = Amount(MISSING, “USD”)</p>
+</div></blockquote>
+<p>You must always specify the currency.</p>
+<p>If a price annotation is simply absent, it appears as None:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account                 2 MXN
+posting.price = None</p>
+</div></blockquote>
+<p>However, you may indicate that there is a price but have Beancount compute it
+automatically:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account                 2 MXN &#64;
+posting.price = Amount(MISSING, MISSING)</p>
+</div></blockquote>
+<p>Indicating the conversion currency is also possible (and recommended):</p>
+<blockquote>
+<div><p>INPUT: Assets:Account                 2 MXN &#64; USD
+posting.price = Amount(MISSING, “USD”)</p>
+</div></blockquote>
+<p>If a cost specification is provided, a “cost” attribute it set but it does not
+refer to a Cost instance (as in complete entries) but rather to a CostSpec
+instance. Some of the fields of a CostSpec may be MISSING if they were not
+specified in the input. For exammple:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account  1 HOOL {100 # 5 USD}
+posting.cost = CostSpec(Decimal(“100”), Decimal(“5”), “USD”, None, None, False))</p>
+</div></blockquote>
+<p>Note how we never consider the label of date override to be MISSING; this is
+because those inputs are optional: A missing label is simply left unset in the
+computed Cost, and a missing date override uses the date of the transaction
+that contains the posting.</p>
+<p>You can indicate that there is a total number to be filled in like this:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account  1 HOOL {100 # USD}
+posting.cost = CostSpec(Decimal(“100”), MISSING, “USD”, None, None, False))</p>
+</div></blockquote>
+<p>This is in contrast to the total value simple not being used:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account  1 HOOL {100 USD}
+posting.cost = CostSpec(Decimal(“100”), None, “USD”, None, None, False))</p>
+</div></blockquote>
+<p>Both per-unit and total numbers may be omitted as well, in which case, only the
+number-per-unit portion of the CostSpec will appear as MISSING:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account  1 HOOL {USD}
+posting.cost = CostSpec(MISSING, None, “USD”, None, None, False))</p>
+</div></blockquote>
+<p>And furthermore, all the cost basis may be missing:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account  1 HOOL {}
+posting.cost = CostSpec(MISSING, None, MISSING, None, None, False))</p>
+</div></blockquote>
+<p>If you ask for the lots to be merged, you get this:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account  1 HOOL {*}
+posting.cost = CostSpec(MISSING, None, MISSING, None, None, True))</p>
+</div></blockquote>
+<p>The numbers have to be computed by Beancount, so we output this with MISSING
+values.</p>
+<p>Of course, you can provide only the non-basis informations, like just the date
+or label:</p>
+<blockquote>
+<div><p>INPUT: Assets:Account  1 HOOL {2015-09-21}
+posting.cost = CostSpec(MISSING, None, MISSING, date(2015, 9, 21), None, True)</p>
+</div></blockquote>
+<p>See the test beancount.parser.grammar_test.TestIncompleteInputs for examples and
+corresponding expected values.</p>
+</div>
+<div class="section" id="module-beancount.parser.printer">
+<span id="beancount-parser-printer"></span><h2>beancount.parser.printer<a class="headerlink" href="#module-beancount.parser.printer" title="Permalink to this headline">¶</a></h2>
+<p>Conversion from internal data structures to text.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fava.html">fava</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.core.html">beancount.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.html">beancount.ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.mixins.html">beancount.ingest.importers.mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ops.html">beancount.ops</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">beancount.parser</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser._parser">beancount.parser._parser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.booking">beancount.parser.booking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.booking_full">beancount.parser.booking_full</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.booking_method">beancount.parser.booking_method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.cmptest">beancount.parser.cmptest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.grammar">beancount.parser.grammar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.hashsrc">beancount.parser.hashsrc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.lexer">beancount.parser.lexer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.options">beancount.parser.options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.parser">beancount.parser.parser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.parser.printer">beancount.parser.printer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.query.html">beancount.query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.reports.html">beancount.reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.scripts.html">beancount.scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/beancount.parser.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

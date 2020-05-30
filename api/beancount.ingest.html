@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>beancount.ingest &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="beancount.ingest.importers" href="beancount.ingest.importers.html" />
+    <link rel="prev" title="beancount.core" href="beancount.core.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-beancount.ingest">
+<span id="beancount-ingest"></span><h1>beancount.ingest<a class="headerlink" href="#module-beancount.ingest" title="Permalink to this headline">¶</a></h1>
+<p>Code to help identify, extract, and file external downloads.</p>
+<p>This packages contains code to help you build importers and drive the process of
+identifying which importer to run on an externally downloaded file, extract
+transactions from them and file away these files under a clean and rigidly named
+hierarchy for preservation.</p>
+<div class="section" id="module-beancount.ingest.cache">
+<span id="beancount-ingest-cache"></span><h2>beancount.ingest.cache<a class="headerlink" href="#module-beancount.ingest.cache" title="Permalink to this headline">¶</a></h2>
+<p>A file wrapper which acts as a cache for on-demand evaluation of conversions.</p>
+<p>This object is used in lieu of a file in order to allow the various importers to
+reuse each others’ conversion results. Converting file contents, e.g. PDF to
+text, can be expensive.</p>
+</div>
+<div class="section" id="module-beancount.ingest.extract">
+<span id="beancount-ingest-extract"></span><h2>beancount.ingest.extract<a class="headerlink" href="#module-beancount.ingest.extract" title="Permalink to this headline">¶</a></h2>
+<p>Extract script.</p>
+<p>Read an import script and a list of downloaded filenames or directories of
+downloaded files, and for each of those files, extract transactions from it.</p>
+</div>
+<div class="section" id="module-beancount.ingest.file">
+<span id="beancount-ingest-file"></span><h2>beancount.ingest.file<a class="headerlink" href="#module-beancount.ingest.file" title="Permalink to this headline">¶</a></h2>
+<p>Filing script.</p>
+<p>Read an import script and a list of downloaded filenames or directories of
+downloaded files, and for each of those files, move the file under an account
+corresponding to the filing directory.</p>
+</div>
+<div class="section" id="module-beancount.ingest.identify">
+<span id="beancount-ingest-identify"></span><h2>beancount.ingest.identify<a class="headerlink" href="#module-beancount.ingest.identify" title="Permalink to this headline">¶</a></h2>
+<p>Identify script.</p>
+<p>Read an import script and a list of downloaded filenames or directories of
+2downloaded files, and for each of those files, identify which importer it should
+be associated with.</p>
+</div>
+<div class="section" id="module-beancount.ingest.importer">
+<span id="beancount-ingest-importer"></span><h2>beancount.ingest.importer<a class="headerlink" href="#module-beancount.ingest.importer" title="Permalink to this headline">¶</a></h2>
+<p>Importer protocol.</p>
+<p>All importers must comply with this interface and implement at least some of its
+methods. A configuration consists in a simple list of such importer instances.
+The importer processes run through the importers, calling some of its methods in
+order to identify, extract and file the downloaded files.</p>
+<p>Each of the methods accept a cache.FileMemo object which has a ‘name’ attribute
+with the filename to process, but which also provides a place to cache
+conversions. Use its convert() method whenever possible to avoid carrying out
+the same conversion multiple times. See beancount.ingest.cache for more details.</p>
+<p>Synopsis:</p>
+<blockquote>
+<div><p>name(): Return a unique identifier for the importer instance.
+identify(): Return true if the identifier is able to process the file.
+extract(): Extract directives from a file’s contents and return of list of entries.
+file_account(): Return an account name associated with the given file for this importer.
+file_date(): Return a date associated with the downloaded file (e.g., the statement date).
+file_name(): Return a cleaned up filename for storage (optional).</p>
+</div></blockquote>
+<p>Just to be clear: Although this importer will not raise NotImplementedError
+exceptions (it returns default values for each method), you NEED to derive from
+it in order to do anything meaningful. Simply instantiating this importer will
+not match not provide any useful information. It just defines the protocol for
+all importers.</p>
+</div>
+<div class="section" id="module-beancount.ingest.regression">
+<span id="beancount-ingest-regression"></span><h2>beancount.ingest.regression<a class="headerlink" href="#module-beancount.ingest.regression" title="Permalink to this headline">¶</a></h2>
+<p>Support for implementing regression tests on sample files using nose.</p>
+<p>NOTE: This itself is not a regression test. It’s a library used to create
+regression tests for your importers. Use it like this in your own importer code:</p>
+<blockquote>
+<div><dl>
+<dt>def test():</dt><dd><dl class="simple">
+<dt>importer = Importer([], {</dt><dd><p>‘FILE’  : ‘Assets:US:MyBank:Main’,</p>
+</dd>
+</dl>
+<p>})
+yield from regression.compare_sample_files(importer, __file__)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>WARNING: This is deprecated. Nose itself has been deprecated for a while and
+Beancount is now using only pytest. Ignore this and use
+beancount.ingest.regression_ptest instead.</p>
+</div>
+<div class="section" id="module-beancount.ingest.regression_pytest">
+<span id="beancount-ingest-regression-pytest"></span><h2>beancount.ingest.regression_pytest<a class="headerlink" href="#module-beancount.ingest.regression_pytest" title="Permalink to this headline">¶</a></h2>
+<p>Support for implementing regression tests on sample files using pytest.</p>
+<p>This module provides definitions for testing a custom importer against a set of
+existing downloaded files, running the various importer interface methods on it,
+and comparing the output to an expected text file. (Expected test files can be
+auto-generated using the –generate option). You use it like this:</p>
+<blockquote>
+<div><p>from beancount.ingest import regression_pytest
+…
+import mymodule
+…</p>
+<p># Create your importer instance used for testing.
+importer = mymodule.Importer(…)</p>
+<p># Select a directory where your test files are to be located.
+directory = …</p>
+<p># Create a test case using the base in this class.</p>
+<p>&#64;regression_pytest.with_importer(importer)
+&#64;regression_pytest.with_testdir(directory)
+class TestImporter(regtest.ImporterTestBase):</p>
+<blockquote>
+<div><p>pass</p>
+</div></blockquote>
+</div></blockquote>
+<p>Also, to add the –generate option to ‘pytest’, you must create a conftest.py
+somewhere in one of the roots above your importers with this module as a plugin:</p>
+<blockquote>
+<div><p>pytest_plugins = “beancount.ingest.regression_pytest”</p>
+</div></blockquote>
+<p>See beancount/example/ingest for a full working example.</p>
+<p>How to invoke the tests:</p>
+<p>Via pytest. First run your test with the –generate option to generate all the
+expected files. Then inspect them visually for correctness. Finally, check them
+in to preserve them. You should be able to regress against those correct outputs
+in the future. Use version control to your advantage to visualize the
+differences.</p>
+</div>
+<div class="section" id="module-beancount.ingest.scripts_utils">
+<span id="beancount-ingest-scripts-utils"></span><h2>beancount.ingest.scripts_utils<a class="headerlink" href="#module-beancount.ingest.scripts_utils" title="Permalink to this headline">¶</a></h2>
+<p>Common front-end to all ingestion tools.</p>
+</div>
+<div class="section" id="module-beancount.ingest.similar">
+<span id="beancount-ingest-similar"></span><h2>beancount.ingest.similar<a class="headerlink" href="#module-beancount.ingest.similar" title="Permalink to this headline">¶</a></h2>
+<p>Identify similar entries.</p>
+<p>This can be used during import in order to identify and flag duplicate entries.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fava.html">fava</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.core.html">beancount.core</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">beancount.ingest</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.cache">beancount.ingest.cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.extract">beancount.ingest.extract</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.file">beancount.ingest.file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.identify">beancount.ingest.identify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.importer">beancount.ingest.importer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.regression">beancount.ingest.regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.regression_pytest">beancount.ingest.regression_pytest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.scripts_utils">beancount.ingest.scripts_utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.similar">beancount.ingest.similar</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.mixins.html">beancount.ingest.importers.mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ops.html">beancount.ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.parser.html">beancount.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.query.html">beancount.query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.reports.html">beancount.reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.scripts.html">beancount.scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/beancount.ingest.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

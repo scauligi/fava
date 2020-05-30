@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>beancount.ops &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="beancount.parser" href="beancount.parser.html" />
+    <link rel="prev" title="beancount.ingest.importers.mixins" href="beancount.ingest.importers.mixins.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-beancount.ops">
+<span id="beancount-ops"></span><h1>beancount.ops<a class="headerlink" href="#module-beancount.ops" title="Permalink to this headline">¶</a></h1>
+<p>Operations on the entries defined in the core modules.</p>
+<p>This package contains various functions which operate on lists of entries.</p>
+<div class="section" id="module-beancount.ops.balance">
+<span id="beancount-ops-balance"></span><h2>beancount.ops.balance<a class="headerlink" href="#module-beancount.ops.balance" title="Permalink to this headline">¶</a></h2>
+<p>Automatic padding of gaps between entries.</p>
+</div>
+<div class="section" id="module-beancount.ops.basicops">
+<span id="beancount-ops-basicops"></span><h2>beancount.ops.basicops<a class="headerlink" href="#module-beancount.ops.basicops" title="Permalink to this headline">¶</a></h2>
+<p>Basic filteirng and aggregration operations on lists of entries.</p>
+<p>This module contains some common basic operations on entries that are complex
+enough not to belong in core/data.py.</p>
+</div>
+<div class="section" id="module-beancount.ops.compress">
+<span id="beancount-ops-compress"></span><h2>beancount.ops.compress<a class="headerlink" href="#module-beancount.ops.compress" title="Permalink to this headline">¶</a></h2>
+<p>Compress multiple entries into a single one.</p>
+<p>This can be used during import to compress the effective output, for accounts
+with a large number of similar entries. For example, I had a trading account
+which would pay out interest every single day. I have no desire to import the
+full detail of these daily interests, and compressing these interest-only
+entries to monthly ones made sense. This is the code that was used to carry this
+out.</p>
+</div>
+<div class="section" id="module-beancount.ops.documents">
+<span id="beancount-ops-documents"></span><h2>beancount.ops.documents<a class="headerlink" href="#module-beancount.ops.documents" title="Permalink to this headline">¶</a></h2>
+<p>Everything that relates to creating the Document directives.</p>
+</div>
+<div class="section" id="module-beancount.ops.holdings">
+<span id="beancount-ops-holdings"></span><h2>beancount.ops.holdings<a class="headerlink" href="#module-beancount.ops.holdings" title="Permalink to this headline">¶</a></h2>
+<p>Compute final holdings for a list of entries.</p>
+</div>
+<div class="section" id="module-beancount.ops.lifetimes">
+<span id="beancount-ops-lifetimes"></span><h2>beancount.ops.lifetimes<a class="headerlink" href="#module-beancount.ops.lifetimes" title="Permalink to this headline">¶</a></h2>
+<p>Given a Beancount ledger, compute time intervals where we hold each commodity.</p>
+<p>This script computes, for each commodity, which time intervals it is required at.
+This can then be used to identify a list of dates at which we need to fetch prices
+in order to properly fill the price database.</p>
+</div>
+<div class="section" id="module-beancount.ops.pad">
+<span id="beancount-ops-pad"></span><h2>beancount.ops.pad<a class="headerlink" href="#module-beancount.ops.pad" title="Permalink to this headline">¶</a></h2>
+<p>Automatic padding of gaps between entries.</p>
+</div>
+<div class="section" id="module-beancount.ops.summarize">
+<span id="beancount-ops-summarize"></span><h2>beancount.ops.summarize<a class="headerlink" href="#module-beancount.ops.summarize" title="Permalink to this headline">¶</a></h2>
+<p>Summarization of entries.</p>
+<p>This code is used to summarize a sequence of entries (e.g. during a time period)
+into a few “opening balance” entries. This is when computing a balance sheet for
+a specific time period: we don’t want to see the entries from before some period
+of time, so we fold them into a single transaction per account that has the sum
+total amount of that account.</p>
+</div>
+<div class="section" id="module-beancount.ops.validation">
+<span id="beancount-ops-validation"></span><h2>beancount.ops.validation<a class="headerlink" href="#module-beancount.ops.validation" title="Permalink to this headline">¶</a></h2>
+<p>Validation checks.</p>
+<p>These checks are intended to be run after all the plugins have transformed the
+list of entries, just before serving them or generating reports from them. The
+idea is to ensure a reasonable set of invariants and generate errors if those
+invariants are violated. They are not sanity checks–user data is subject to
+constraints which are hopefully detected here and which will result in errors
+trickled up to the user.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fava.html">fava</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.core.html">beancount.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.html">beancount.ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.mixins.html">beancount.ingest.importers.mixins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">beancount.ops</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.balance">beancount.ops.balance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.basicops">beancount.ops.basicops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.compress">beancount.ops.compress</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.documents">beancount.ops.documents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.holdings">beancount.ops.holdings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.lifetimes">beancount.ops.lifetimes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.pad">beancount.ops.pad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.summarize">beancount.ops.summarize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ops.validation">beancount.ops.validation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.parser.html">beancount.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.query.html">beancount.query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.reports.html">beancount.reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.scripts.html">beancount.scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/beancount.ops.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

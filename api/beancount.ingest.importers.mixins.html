@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>beancount.ingest.importers.mixins &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="beancount.ops" href="beancount.ops.html" />
+    <link rel="prev" title="beancount.ingest.importers" href="beancount.ingest.importers.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-beancount.ingest.importers.mixins">
+<span id="beancount-ingest-importers-mixins"></span><h1>beancount.ingest.importers.mixins<a class="headerlink" href="#module-beancount.ingest.importers.mixins" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-beancount.ingest.importers.mixins.config">
+<span id="beancount-ingest-importers-mixins-config"></span><h2>beancount.ingest.importers.mixins.config<a class="headerlink" href="#module-beancount.ingest.importers.mixins.config" title="Permalink to this headline">¶</a></h2>
+<p>Base class that implements configuration and a filing account.</p>
+</div>
+<div class="section" id="module-beancount.ingest.importers.mixins.filing">
+<span id="beancount-ingest-importers-mixins-filing"></span><h2>beancount.ingest.importers.mixins.filing<a class="headerlink" href="#module-beancount.ingest.importers.mixins.filing" title="Permalink to this headline">¶</a></h2>
+<p>Base class that implements filing account.</p>
+<p>It also sports an optional prefix to prepend to the renamed filename. Typically
+you can put the name of the institution there, so you get a renamed filename
+like this:</p>
+<blockquote>
+<div><p>YYYY-MM-DD.institution.Original_File_Name.pdf</p>
+</div></blockquote>
+</div>
+<div class="section" id="module-beancount.ingest.importers.mixins.identifier">
+<span id="beancount-ingest-importers-mixins-identifier"></span><h2>beancount.ingest.importers.mixins.identifier<a class="headerlink" href="#module-beancount.ingest.importers.mixins.identifier" title="Permalink to this headline">¶</a></h2>
+<p>Base class that implements identification using regular expressions.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fava.html">fava</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.core.html">beancount.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.html">beancount.ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">beancount.ingest.importers.mixins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.importers.mixins.config">beancount.ingest.importers.mixins.config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.importers.mixins.filing">beancount.ingest.importers.mixins.filing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.ingest.importers.mixins.identifier">beancount.ingest.importers.mixins.identifier</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ops.html">beancount.ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.parser.html">beancount.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.query.html">beancount.query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.reports.html">beancount.reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.scripts.html">beancount.scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/beancount.ingest.importers.mixins.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

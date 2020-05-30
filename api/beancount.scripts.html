@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>beancount.scripts &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="beancount.tools" href="beancount.tools.html" />
+    <link rel="prev" title="beancount.reports" href="beancount.reports.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-beancount.scripts">
+<span id="beancount-scripts"></span><h1>beancount.scripts<a class="headerlink" href="#module-beancount.scripts" title="Permalink to this headline">¶</a></h1>
+<p>Implementation of the various scripts available from bin.</p>
+<p>This is structured this way because we want all the significant codes under a
+single directory, for analysis, grepping and unit testing.</p>
+<div class="section" id="module-beancount.scripts.bake">
+<span id="beancount-scripts-bake"></span><h2>beancount.scripts.bake<a class="headerlink" href="#module-beancount.scripts.bake" title="Permalink to this headline">¶</a></h2>
+<p>Bake a Beancount input file’s web files to a directory hierarchy.</p>
+<p>You provide a Beancount filename, an output directory, and this script
+runs a server and a scraper that puts all the files in the directory,
+and if your output name has an archive suffix, we automatically the
+fetched directory contents to the archive and delete them.</p>
+</div>
+<div class="section" id="module-beancount.scripts.check">
+<span id="beancount-scripts-check"></span><h2>beancount.scripts.check<a class="headerlink" href="#module-beancount.scripts.check" title="Permalink to this headline">¶</a></h2>
+<p>Parse, check and realize a beancount input file.</p>
+<p>This also measures the time it takes to run all these steps.</p>
+</div>
+<div class="section" id="module-beancount.scripts.deps">
+<span id="beancount-scripts-deps"></span><h2>beancount.scripts.deps<a class="headerlink" href="#module-beancount.scripts.deps" title="Permalink to this headline">¶</a></h2>
+<p>Check the installation dependencies and report the version numbers of each.</p>
+<p>This is meant to be used as an error diagnostic tool.</p>
+</div>
+<div class="section" id="module-beancount.scripts.directories">
+<span id="beancount-scripts-directories"></span><h2>beancount.scripts.directories<a class="headerlink" href="#module-beancount.scripts.directories" title="Permalink to this headline">¶</a></h2>
+<p>Check that document directories mirror a list of accounts correctly.</p>
+</div>
+<div class="section" id="module-beancount.scripts.doctor">
+<span id="beancount-scripts-doctor"></span><h2>beancount.scripts.doctor<a class="headerlink" href="#module-beancount.scripts.doctor" title="Permalink to this headline">¶</a></h2>
+<p>Debugging tool for those finding bugs in Beancount.</p>
+<p>This tool is able to dump lexer/parser state, and will provide other services in
+the name of debugging.</p>
+</div>
+<div class="section" id="module-beancount.scripts.example">
+<span id="beancount-scripts-example"></span><h2>beancount.scripts.example<a class="headerlink" href="#module-beancount.scripts.example" title="Permalink to this headline">¶</a></h2>
+<p>Generate a decently-sized example history, based on some rules.</p>
+<p>This script is used to generate some meaningful input to Beancount, input that
+looks as realistic as possible for a moderately complex mock individual. This
+can also be used as an input generator for a stress test for performance
+evaluation.</p>
+</div>
+<div class="section" id="module-beancount.scripts.format">
+<span id="beancount-scripts-format"></span><h2>beancount.scripts.format<a class="headerlink" href="#module-beancount.scripts.format" title="Permalink to this headline">¶</a></h2>
+<p>Align a beancount/ledger input file’s numbers.</p>
+<p>This reformats at beancount or ledger input file so that the amounts in the
+postings are all aligned to the same column. The currency should match.</p>
+<p>Note: this does not parse the Beancount ledger. It simply uses regular
+expressions and text manipulations to do its work.</p>
+</div>
+<div class="section" id="module-beancount.scripts.sql">
+<span id="beancount-scripts-sql"></span><h2>beancount.scripts.sql<a class="headerlink" href="#module-beancount.scripts.sql" title="Permalink to this headline">¶</a></h2>
+<p>Convert a Beancount ledger into an SQL database.</p>
+</div>
+<div class="section" id="module-beancount.scripts.tutorial">
+<span id="beancount-scripts-tutorial"></span><h2>beancount.scripts.tutorial<a class="headerlink" href="#module-beancount.scripts.tutorial" title="Permalink to this headline">¶</a></h2>
+<p>Write output files for the tutorial commands.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fava.html">fava</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.core.html">beancount.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.html">beancount.ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.mixins.html">beancount.ingest.importers.mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ops.html">beancount.ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.parser.html">beancount.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.query.html">beancount.query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.reports.html">beancount.reports</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">beancount.scripts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.bake">beancount.scripts.bake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.check">beancount.scripts.check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.deps">beancount.scripts.deps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.directories">beancount.scripts.directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.doctor">beancount.scripts.doctor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.example">beancount.scripts.example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.format">beancount.scripts.format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.sql">beancount.scripts.sql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.scripts.tutorial">beancount.scripts.tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/beancount.scripts.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

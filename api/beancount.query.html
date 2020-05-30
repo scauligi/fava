@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>beancount.query &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="beancount.reports" href="beancount.reports.html" />
+    <link rel="prev" title="beancount.prices.sources" href="beancount.prices.sources.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-beancount.query">
+<span id="beancount-query"></span><h1>beancount.query<a class="headerlink" href="#module-beancount.query" title="Permalink to this headline">¶</a></h1>
+<p>Transaction and postings filtering syntax parser.</p>
+<div class="section" id="module-beancount.query.numberify">
+<span id="beancount-query-numberify"></span><h2>beancount.query.numberify<a class="headerlink" href="#module-beancount.query.numberify" title="Permalink to this headline">¶</a></h2>
+<p>Code to split table columns containing amounts and inventories into number columns.</p>
+<p>For example, given a column with this content:</p>
+<blockquote>
+<div><p>—– amount ——
+101.23 USD</p>
+<blockquote>
+<div><blockquote>
+<div><p>200 JPY</p>
+</div></blockquote>
+<p>99.23 USD
+38.34 USD, 100 JPY</p>
+</div></blockquote>
+</div></blockquote>
+<p>We can convert this into two columns and remove the currencies:</p>
+<blockquote>
+<div><dl>
+<dt>-amount (USD)- -amount (JPY)-</dt><dd><dl>
+<dt>101.23</dt><dd><blockquote>
+<div><p>200</p>
+</div></blockquote>
+<p>99.23
+38.34            100</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>The point is that the columns should be typed as numbers to make this importable
+into a spreadsheet and able to be processed.</p>
+<p>Notes:</p>
+<ul>
+<li><p>This handles the Amount, Position and Inventory datatypes. There is code to
+automatically recognize columns containing such types from a table of strings
+and convert such columns to their corresponding guessed data types.</p></li>
+<li><p>The per-currency columns are ordered in decreasing order of the number of
+instances of numbers seen for each currency. So if the most numbers you have
+in a column are USD, then the USD column renders first.</p></li>
+<li><p>Cost basis specifications should be unmodified and reported to a dedicated
+extra column, like this:</p>
+<blockquote>
+<div><p>—– amount ——
+1 AAPL {21.23 USD}</p>
+</div></blockquote>
+<p>We can convert this into two columns and remove the currencies:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>-amount (AAPL)- -Cost basis-</dt><dd><p>1 {21.23 USD}</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>(Eventually we might support the conversion of cost amounts as well, but they
+may contain other informations, such as a label or a date, so for now we don’t
+convert them. I’m not sure there’s a good practical use case in doing that
+yet.)</p>
+</li>
+<li><p>We may provide some options to break out only some of the currencies into
+columns, in order to handle the case where an inventory contains a large
+number of currencies and we want to only operate on a restricte set of
+operating currencies.</p></li>
+<li><p>If you provide a DisplayForamtter object to the numberification routine, they
+quantize each column according to their currency’s precision. It is
+recommended that you do that.</p></li>
+</ul>
+</div>
+<div class="section" id="module-beancount.query.query">
+<span id="beancount-query-query"></span><h2>beancount.query.query<a class="headerlink" href="#module-beancount.query.query" title="Permalink to this headline">¶</a></h2>
+<p>A library to run queries. This glues together all the parts of the query engine.</p>
+</div>
+<div class="section" id="module-beancount.query.query_compile">
+<span id="beancount-query-query-compile"></span><h2>beancount.query.query_compile<a class="headerlink" href="#module-beancount.query.query_compile" title="Permalink to this headline">¶</a></h2>
+<p>Interpreter for the query language’s AST.</p>
+<p>This code accepts the abstract syntax tree produced by the query parser,
+resolves the column and function names, compiles and interpreter and prepares a
+query to be run against a list of entries.</p>
+</div>
+<div class="section" id="module-beancount.query.query_env">
+<span id="beancount-query-query-env"></span><h2>beancount.query.query_env<a class="headerlink" href="#module-beancount.query.query_env" title="Permalink to this headline">¶</a></h2>
+<p>Environment object for compiler.</p>
+<p>This module contains the various column accessors and function evaluators that
+are made available by the query compiler via their compilation context objects.
+Define new columns and functions here.</p>
+</div>
+<div class="section" id="module-beancount.query.query_execute">
+<span id="beancount-query-query-execute"></span><h2>beancount.query.query_execute<a class="headerlink" href="#module-beancount.query.query_execute" title="Permalink to this headline">¶</a></h2>
+<p>Execution of interpreter on data rows.</p>
+</div>
+<div class="section" id="module-beancount.query.query_parser">
+<span id="beancount-query-query-parser"></span><h2>beancount.query.query_parser<a class="headerlink" href="#module-beancount.query.query_parser" title="Permalink to this headline">¶</a></h2>
+<p>Parser for Beancount Query Language.</p>
+</div>
+<div class="section" id="module-beancount.query.query_render">
+<span id="beancount-query-query-render"></span><h2>beancount.query.query_render<a class="headerlink" href="#module-beancount.query.query_render" title="Permalink to this headline">¶</a></h2>
+<p>Rendering of rows.</p>
+</div>
+<div class="section" id="module-beancount.query.shell">
+<span id="beancount-query-shell"></span><h2>beancount.query.shell<a class="headerlink" href="#module-beancount.query.shell" title="Permalink to this headline">¶</a></h2>
+<p>An interactive command-line shell interpreter for the Beancount Query Language.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fava.html">fava</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.core.html">beancount.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.html">beancount.ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.mixins.html">beancount.ingest.importers.mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ops.html">beancount.ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.parser.html">beancount.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">beancount.query</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.query.numberify">beancount.query.numberify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.query.query">beancount.query.query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.query.query_compile">beancount.query.query_compile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.query.query_env">beancount.query.query_env</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.query.query_execute">beancount.query.query_execute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.query.query_parser">beancount.query.query_parser</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.query.query_render">beancount.query.query_render</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.query.shell">beancount.query.shell</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.reports.html">beancount.reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.scripts.html">beancount.scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/beancount.query.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

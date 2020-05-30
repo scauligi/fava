@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>beancount.reports &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="beancount.scripts" href="beancount.scripts.html" />
+    <link rel="prev" title="beancount.query" href="beancount.query.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-beancount.reports">
+<span id="beancount-reports"></span><h1>beancount.reports<a class="headerlink" href="#module-beancount.reports" title="Permalink to this headline">¶</a></h1>
+<p>Routines to produce various reports, either to HTML or to text.</p>
+<div class="section" id="module-beancount.reports.balance_reports">
+<span id="beancount-reports-balance-reports"></span><h2>beancount.reports.balance_reports<a class="headerlink" href="#module-beancount.reports.balance_reports" title="Permalink to this headline">¶</a></h2>
+<p>Report classes for all reports that display ending balances of accounts.</p>
+</div>
+<div class="section" id="module-beancount.reports.base">
+<span id="beancount-reports-base"></span><h2>beancount.reports.base<a class="headerlink" href="#module-beancount.reports.base" title="Permalink to this headline">¶</a></h2>
+<p>Base class for all reports classes.</p>
+<p>Each report class should be able to render a filtered list of entries to a
+variety of formats. Each report has a name, some command-line options, and
+supports some subset of formats.</p>
+</div>
+<div class="section" id="module-beancount.reports.context">
+<span id="beancount-reports-context"></span><h2>beancount.reports.context<a class="headerlink" href="#module-beancount.reports.context" title="Permalink to this headline">¶</a></h2>
+<p>Produce a rendering of the account balances just before and after a
+particular entry is applied.</p>
+</div>
+<div class="section" id="module-beancount.reports.convert_reports">
+<span id="beancount-reports-convert-reports"></span><h2>beancount.reports.convert_reports<a class="headerlink" href="#module-beancount.reports.convert_reports" title="Permalink to this headline">¶</a></h2>
+<p>Format converter reports.</p>
+<p>This module contains reports that can convert an input file into other formats,
+such as Ledger.</p>
+</div>
+<div class="section" id="module-beancount.reports.export_reports">
+<span id="beancount-reports-export-reports"></span><h2>beancount.reports.export_reports<a class="headerlink" href="#module-beancount.reports.export_reports" title="Permalink to this headline">¶</a></h2>
+<p>Reports to Export to third-party portfolio sites.</p>
+</div>
+<div class="section" id="module-beancount.reports.gviz">
+<span id="beancount-reports-gviz"></span><h2>beancount.reports.gviz<a class="headerlink" href="#module-beancount.reports.gviz" title="Permalink to this headline">¶</a></h2>
+<p>Support for creating Google gviz timeline charts.</p>
+</div>
+<div class="section" id="module-beancount.reports.holdings_reports">
+<span id="beancount-reports-holdings-reports"></span><h2>beancount.reports.holdings_reports<a class="headerlink" href="#module-beancount.reports.holdings_reports" title="Permalink to this headline">¶</a></h2>
+<p>Generate reports no holdings.</p>
+</div>
+<div class="section" id="module-beancount.reports.html_formatter">
+<span id="beancount-reports-html-formatter"></span><h2>beancount.reports.html_formatter<a class="headerlink" href="#module-beancount.reports.html_formatter" title="Permalink to this headline">¶</a></h2>
+<p>Base class for HTML formatters.</p>
+<p>This object encapsulates the rendering of various objects to HTML.
+You may, and should, derive and override from this object in order to
+provide links within a web interface.</p>
+</div>
+<div class="section" id="module-beancount.reports.journal_html">
+<span id="beancount-reports-journal-html"></span><h2>beancount.reports.journal_html<a class="headerlink" href="#module-beancount.reports.journal_html" title="Permalink to this headline">¶</a></h2>
+<p>HTML rendering routines for serving a lists of postings/entries.</p>
+</div>
+<div class="section" id="module-beancount.reports.journal_reports">
+<span id="beancount-reports-journal-reports"></span><h2>beancount.reports.journal_reports<a class="headerlink" href="#module-beancount.reports.journal_reports" title="Permalink to this headline">¶</a></h2>
+<p>Report classes for all reports that display ending journals of accounts.</p>
+</div>
+<div class="section" id="module-beancount.reports.journal_text">
+<span id="beancount-reports-journal-text"></span><h2>beancount.reports.journal_text<a class="headerlink" href="#module-beancount.reports.journal_text" title="Permalink to this headline">¶</a></h2>
+<p>Text rendering routines for serving a lists of postings/entries.</p>
+</div>
+<div class="section" id="module-beancount.reports.misc_reports">
+<span id="beancount-reports-misc-reports"></span><h2>beancount.reports.misc_reports<a class="headerlink" href="#module-beancount.reports.misc_reports" title="Permalink to this headline">¶</a></h2>
+<p>Miscellaneous report classes.</p>
+</div>
+<div class="section" id="module-beancount.reports.price_reports">
+<span id="beancount-reports-price-reports"></span><h2>beancount.reports.price_reports<a class="headerlink" href="#module-beancount.reports.price_reports" title="Permalink to this headline">¶</a></h2>
+<p>Miscellaneous report classes.</p>
+</div>
+<div class="section" id="module-beancount.reports.report">
+<span id="beancount-reports-report"></span><h2>beancount.reports.report<a class="headerlink" href="#module-beancount.reports.report" title="Permalink to this headline">¶</a></h2>
+<p>Produce various custom implemented reports.</p>
+</div>
+<div class="section" id="module-beancount.reports.table">
+<span id="beancount-reports-table"></span><h2>beancount.reports.table<a class="headerlink" href="#module-beancount.reports.table" title="Permalink to this headline">¶</a></h2>
+<p>Table rendering.</p>
+</div>
+<div class="section" id="module-beancount.reports.tree_table">
+<span id="beancount-reports-tree-table"></span><h2>beancount.reports.tree_table<a class="headerlink" href="#module-beancount.reports.tree_table" title="Permalink to this headline">¶</a></h2>
+<p>Routines to render an HTML table with a tree of accounts.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fava.html">fava</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.core.html">beancount.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.html">beancount.ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.mixins.html">beancount.ingest.importers.mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ops.html">beancount.ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.parser.html">beancount.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.query.html">beancount.query</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">beancount.reports</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.balance_reports">beancount.reports.balance_reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.base">beancount.reports.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.context">beancount.reports.context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.convert_reports">beancount.reports.convert_reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.export_reports">beancount.reports.export_reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.gviz">beancount.reports.gviz</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.holdings_reports">beancount.reports.holdings_reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.html_formatter">beancount.reports.html_formatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.journal_html">beancount.reports.journal_html</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.journal_reports">beancount.reports.journal_reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.journal_text">beancount.reports.journal_text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.misc_reports">beancount.reports.misc_reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.price_reports">beancount.reports.price_reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.report">beancount.reports.report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.table">beancount.reports.table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.reports.tree_table">beancount.reports.tree_table</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.scripts.html">beancount.scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/beancount.reports.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

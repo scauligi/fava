@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>fava &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fava.core" href="fava.core.html" />
+    <link rel="prev" title="API Documentation" href="../api.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fava">
+<span id="fava"></span><h1>fava<a class="headerlink" href="#module-fava" title="Permalink to this headline">¶</a></h1>
+<p>Fava – A web interface for Beancount.</p>
+<div class="section" id="module-fava.application">
+<span id="fava-application"></span><h2>fava.application<a class="headerlink" href="#module-fava.application" title="Permalink to this headline">¶</a></h2>
+<p>Fava’s main WSGI application.</p>
+<p>when using Fava’s WSGI app, make sure to set <code class="docutils literal notranslate"><span class="pre">app.config['BEANCOUNT_FILES']</span></code>.
+To start a simple server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fava.application</span> <span class="kn">import</span> <span class="n">app</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;BEANCOUNT_FILES&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/path/to/file.beancount&#39;</span><span class="p">]</span>
+<span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="fava.application.app">
+<code class="sig-prename descclassname">fava.application.</code><code class="sig-name descname">app</code><a class="headerlink" href="#fava.application.app" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">flask.Flask</span></code>, this is Fava’s WSGI application.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-fava.cli">
+<span id="fava-cli"></span><h2>fava.cli<a class="headerlink" href="#module-fava.cli" title="Permalink to this headline">¶</a></h2>
+<p>The command-line interface for Fava.</p>
+</div>
+<div class="section" id="module-fava.context">
+<span id="fava-context"></span><h2>fava.context<a class="headerlink" href="#module-fava.context" title="Permalink to this headline">¶</a></h2>
+<p>Specify types for the flask application context.</p>
+</div>
+<div class="section" id="module-fava.helpers">
+<span id="fava-helpers"></span><h2>fava.helpers<a class="headerlink" href="#module-fava.helpers" title="Permalink to this headline">¶</a></h2>
+<p>Exceptions and module base class.</p>
+</div>
+<div class="section" id="module-fava.json_api">
+<span id="fava-json-api"></span><h2>fava.json_api<a class="headerlink" href="#module-fava.json_api" title="Permalink to this headline">¶</a></h2>
+<p>JSON API.</p>
+<p>This module contains the url endpoints of the JSON API that is used by the web
+interface for asynchronous functionality.</p>
+</div>
+<div class="section" id="module-fava.serialisation">
+<span id="fava-serialisation"></span><h2>fava.serialisation<a class="headerlink" href="#module-fava.serialisation" title="Permalink to this headline">¶</a></h2>
+<p>(De)serialisation of entries.</p>
+<p>When adding entries, these are saved via the JSON API - using the functionality
+of this module to obtain the appropriate data structures from
+<cite>beancount.core.data</cite>. Similarly, for the full entry completion, a JSON
+representation of the entry is provided.</p>
+<p>This is not intended to work well enough for full roundtrips yet.</p>
+</div>
+<div class="section" id="module-fava.template_filters">
+<span id="fava-template-filters"></span><h2>fava.template_filters<a class="headerlink" href="#module-fava.template_filters" title="Permalink to this headline">¶</a></h2>
+<p>Template filters for Fava.</p>
+<p>All functions in this module will be automatically added as template filters.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fava</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-fava.application">fava.application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fava.cli">fava.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fava.context">fava.context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fava.helpers">fava.helpers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fava.json_api">fava.json_api</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fava.serialisation">fava.serialisation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fava.template_filters">fava.template_filters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.core.html">beancount.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.html">beancount.ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.mixins.html">beancount.ingest.importers.mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ops.html">beancount.ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.parser.html">beancount.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.query.html">beancount.query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.reports.html">beancount.reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.scripts.html">beancount.scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/fava.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

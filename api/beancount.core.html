@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>beancount.core &#8212; Fava  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="beancount.ingest" href="beancount.ingest.html" />
+    <link rel="prev" title="beancount" href="beancount.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-beancount.core">
+<span id="beancount-core"></span><h1>beancount.core<a class="headerlink" href="#module-beancount.core" title="Permalink to this headline">¶</a></h1>
+<p>Core basic objects and data structures to represent a list of entries.</p>
+<div class="section" id="module-beancount.core.account">
+<span id="beancount-core-account"></span><h2>beancount.core.account<a class="headerlink" href="#module-beancount.core.account" title="Permalink to this headline">¶</a></h2>
+<p>Functions that operate on account strings.</p>
+<p>These account objects are rather simple and dumb; they do not contain the list
+of their associated postings. This is achieved by building a realization; see
+realization.py for details.</p>
+</div>
+<div class="section" id="module-beancount.core.account_types">
+<span id="beancount-core-account-types"></span><h2>beancount.core.account_types<a class="headerlink" href="#module-beancount.core.account_types" title="Permalink to this headline">¶</a></h2>
+<p>Definition for global account types.</p>
+<p>This is where we keep the global account types value and definition.</p>
+<p>Note that it’s unfortunate that we’re using globals and side-effect here, but
+this is the best solution in the short-term, the account types are used
+in too many places to pass around that state everywhere. Maybe we change
+this later on.</p>
+</div>
+<div class="section" id="module-beancount.core.amount">
+<span id="beancount-core-amount"></span><h2>beancount.core.amount<a class="headerlink" href="#module-beancount.core.amount" title="Permalink to this headline">¶</a></h2>
+<p>Amount class.</p>
+<p>This simple class is used to associate a number of units of a currency with its
+currency:</p>
+<blockquote>
+<div><p>(number, currency).</p>
+</div></blockquote>
+</div>
+<div class="section" id="module-beancount.core.compare">
+<span id="beancount-core-compare"></span><h2>beancount.core.compare<a class="headerlink" href="#module-beancount.core.compare" title="Permalink to this headline">¶</a></h2>
+<p>Comparison helpers for data objects.</p>
+</div>
+<div class="section" id="module-beancount.core.convert">
+<span id="beancount-core-convert"></span><h2>beancount.core.convert<a class="headerlink" href="#module-beancount.core.convert" title="Permalink to this headline">¶</a></h2>
+<p>Conversions from Position (or Posting) to units, cost, weight, market value.</p>
+<blockquote>
+<div><p>Units: Just the primary amount of the position.
+Cost: The cost basis of the position, if available.
+Weight: The cost basis or price of the position.
+Market Value: The units converted to a value via a price map.</p>
+</div></blockquote>
+<p>To convert an inventory’s contents, simply use these functions in conjunction
+with Inventory.reduce(), like</p>
+<blockquote>
+<div><p>cost_inv = inv.reduce(convert.get_cost)</p>
+</div></blockquote>
+<p>This module equivalently converts Position and Posting instances. Note that
+we’re specifically avoiding to create an import dependency on
+beancount.core.data in order to keep this module isolatable, but it works on
+postings due to duck-typing.</p>
+<p>Function named get_*() are used to compute values from postings to their price currency.
+Functions named convert_*() are used to convert postings and amounts to any currency.</p>
+</div>
+<div class="section" id="module-beancount.core.data">
+<span id="beancount-core-data"></span><h2>beancount.core.data<a class="headerlink" href="#module-beancount.core.data" title="Permalink to this headline">¶</a></h2>
+<p>Basic data structures used to represent the Ledger entries.</p>
+</div>
+<div class="section" id="module-beancount.core.display_context">
+<span id="beancount-core-display-context"></span><h2>beancount.core.display_context<a class="headerlink" href="#module-beancount.core.display_context" title="Permalink to this headline">¶</a></h2>
+<p>A settings class to offer control over the number of digits rendered.</p>
+<p>This module contains routines that can accumulate information on the width and
+precision of numbers to be rendered and derive the precision required to render
+all of them consistently and under certain common alignment requirements. This
+is required in order to output neatly lined up columns of numbers in various
+styles.</p>
+<p>A common case is that the precision can be observed for numbers present in the
+input file. This display precision can be used as the “precision by default” if
+we write a routine for which it is inconvenient to feed all the numbers to build
+such an accumulator.</p>
+<p>Here are all the aspects supported by this module:</p>
+<blockquote>
+<div><p>PRECISION: Numbers for a particular currency are always rendered to the same
+precision, and they can be rendered to one of two precisions; either</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>the most common number of fractional digits, or</p></li>
+<li><p>the maximum number of digits seen (this is useful for rendering prices).</p></li>
+</ol>
+</div></blockquote>
+<p>ALIGNMENT: Several alignment methods are supported.</p>
+<blockquote>
+<div><p>“natural”: Render the strings as small as possible with no padding, but to
+their currency’s precision. Like this:</p>
+<blockquote>
+<div><p>‘1.2345’
+‘764’
+‘-7,409.01’
+‘0.00000125’</p>
+</div></blockquote>
+<dl>
+<dt>“dot-aligned”: The periods will align vertically, the left and right sides</dt><dd><p>are padded so that the column of numbers has the same width:</p>
+<p>‘     1.2345    ‘
+‘   764         ‘
+‘-7,409.01      ‘
+‘     0.00000125’</p>
+</dd>
+<dt>“right”: The strings are all flushed right, the left side is padded so that</dt><dd><p>the column of numbers has the same width:</p>
+<p>‘     1.2345’
+‘        764’
+‘  -7,409.01’
+‘ 0.00000125’</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>SIGN: If a negative sign is present in the input numbers, the rendered numbers
+reserve a space for it. If not, then we save the space.</p>
+<p>COMMAS: If the user requests to render commas, commas are rendered in the
+output.</p>
+<p>RESERVED: A number of extra integral digits reserved on the left in order to
+allow rendering novel numbers that haven’t yet been seen. For example,
+balances may contains much larger numbers than the numbers seen in input
+files, and these need to be accommodated when aligning to the right.</p>
+</div></blockquote>
+</div>
+<div class="section" id="module-beancount.core.distribution">
+<span id="beancount-core-distribution"></span><h2>beancount.core.distribution<a class="headerlink" href="#module-beancount.core.distribution" title="Permalink to this headline">¶</a></h2>
+<p>A simple accumulator for data about a mathematical distribution.</p>
+</div>
+<div class="section" id="module-beancount.core.flags">
+<span id="beancount-core-flags"></span><h2>beancount.core.flags<a class="headerlink" href="#module-beancount.core.flags" title="Permalink to this headline">¶</a></h2>
+<p>Flag constants.</p>
+</div>
+<div class="section" id="module-beancount.core.getters">
+<span id="beancount-core-getters"></span><h2>beancount.core.getters<a class="headerlink" href="#module-beancount.core.getters" title="Permalink to this headline">¶</a></h2>
+<p>Getter functions that operate on lists of entries to return various lists of
+things that they reference, accounts, tags, links, currencies, etc.</p>
+</div>
+<div class="section" id="module-beancount.core.interpolate">
+<span id="beancount-core-interpolate"></span><h2>beancount.core.interpolate<a class="headerlink" href="#module-beancount.core.interpolate" title="Permalink to this headline">¶</a></h2>
+<p>Code used to automatically complete postings without positions.</p>
+</div>
+<div class="section" id="module-beancount.core.inventory">
+<span id="beancount-core-inventory"></span><h2>beancount.core.inventory<a class="headerlink" href="#module-beancount.core.inventory" title="Permalink to this headline">¶</a></h2>
+<p>A container for an inventory of positions.</p>
+<p>This module provides a container class that can hold positions. An inventory is
+a mapping of positions, where each position is keyed by</p>
+<blockquote>
+<div><p>(currency: str, cost: Cost) -&gt; position: Position</p>
+</div></blockquote>
+<p>where</p>
+<blockquote>
+<div><dl class="simple">
+<dt>‘currency’: The commodity under consideration, USD, CAD, or stock units such</dt><dd><p>as HOOL, MSFT, AAPL, etc.;</p>
+</dd>
+<dt>‘cost’: None or a Cost instance existing of cost currency, number, date, and</dt><dd><p>label;</p>
+</dd>
+<dt>‘position’: A Position object, whose ‘units’ attribute is guaranteed to have</dt><dd><p>the same currency as ‘currency’ and whose ‘cost’ attribute is equal to the
+‘cost’ key. It basically stores the number of units.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>This is meant to accommodate both booked and non-booked amounts. The clever
+trick that we pull to do this is that for positions which aren’t booked, we
+simply leave the ‘cost’ as None. This is the case for most of the transactions.</p>
+</div>
+<div class="section" id="module-beancount.core.number">
+<span id="beancount-core-number"></span><h2>beancount.core.number<a class="headerlink" href="#module-beancount.core.number" title="Permalink to this headline">¶</a></h2>
+<p>The module contains the basic Decimal type import.</p>
+<p>About Decimal usage:</p>
+<ul class="simple">
+<li><p>Do not import Decimal from the ‘decimal’ or ‘cdecimal’ modules; always import
+your Decimal class from beancount.core.amount.</p></li>
+<li><p>Prefer to use D() to create new instances of Decimal objects, which
+handles more syntax, e.g., handles None, and numbers with commas.</p></li>
+</ul>
+</div>
+<div class="section" id="module-beancount.core.position">
+<span id="beancount-core-position"></span><h2>beancount.core.position<a class="headerlink" href="#module-beancount.core.position" title="Permalink to this headline">¶</a></h2>
+<p>A position object, which consists of units Amount and cost Cost.</p>
+<p>See types below for details.</p>
+</div>
+<div class="section" id="module-beancount.core.prices">
+<span id="beancount-core-prices"></span><h2>beancount.core.prices<a class="headerlink" href="#module-beancount.core.prices" title="Permalink to this headline">¶</a></h2>
+<p>This module has code that can build a database of historical prices at
+various times, from which unrealized capital gains and market value can be
+deduced.</p>
+<p>Prices are deduced from Price entries found in the file, or perhaps
+created by scripts (for example you could build a script that will fetch
+live prices online and create entries on-the-fly).</p>
+</div>
+<div class="section" id="module-beancount.core.realization">
+<span id="beancount-core-realization"></span><h2>beancount.core.realization<a class="headerlink" href="#module-beancount.core.realization" title="Permalink to this headline">¶</a></h2>
+<p>Realization of specific lists of account postings into reports.</p>
+<p>This code converts a list of entries into a tree of RealAccount nodes (which
+stands for “realized accounts”). The RealAccount objects contain lists of
+Posting instances instead of Transactions, or other entry types that are
+attached to an account, such as a Balance or Note entry.</p>
+<p>The interface of RealAccount corresponds to that of a regular Python dict, where
+the keys are the names of the individual components of an account’s name, and
+the values are always other RealAccount instances. If you want to get an account
+by long account name, there are helper functions in this module for this purpose
+(see realization.get(), for instance). RealAccount instances also contain the
+final balance of that account, resulting from its list of postings.</p>
+<p>You should not build RealAccount trees yourself; instead, you should filter the
+list of desired directives to display and call the realize() function with them.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Fava</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Web interface for <a href="http://furius.ca/beancount/">Beancount</a></p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fava.html">fava</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.core.html">fava.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.html">fava.ext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.ext.portfolio_list.html">fava.ext.portfolio_list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.help.html">fava.help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.plugins.html">fava.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fava.util.html">fava.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.html">beancount</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">beancount.core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.account">beancount.core.account</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.account_types">beancount.core.account_types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.amount">beancount.core.amount</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.compare">beancount.core.compare</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.convert">beancount.core.convert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.data">beancount.core.data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.display_context">beancount.core.display_context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.distribution">beancount.core.distribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.flags">beancount.core.flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.getters">beancount.core.getters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.interpolate">beancount.core.interpolate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.inventory">beancount.core.inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.number">beancount.core.number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.position">beancount.core.position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.prices">beancount.core.prices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-beancount.core.realization">beancount.core.realization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.html">beancount.ingest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.html">beancount.ingest.importers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ingest.importers.mixins.html">beancount.ingest.importers.mixins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.ops.html">beancount.ops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.parser.html">beancount.parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.plugins.html">beancount.plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.html">beancount.prices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.prices.sources.html">beancount.prices.sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.query.html">beancount.query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.reports.html">beancount.reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.scripts.html">beancount.scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.tools.html">beancount.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.utils.html">beancount.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beancount.web.html">beancount.web</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava">fava @ GitHub</a></li>
+    
+    <li class="toctree-l1"><a href="https://gitter.im/beancount/fava">Chat</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/beancount/fava/issues">Issue Tracker</a></li>
+    
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Dominik Aumayr.
+      
+      |
+      <a href="../_sources/api/beancount.core.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
