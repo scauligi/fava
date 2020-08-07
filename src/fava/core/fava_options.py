@@ -76,6 +76,7 @@ DEFAULTS = {
     "upcoming-events": 7,
     "uptodate-indicator-grey-lookback-days": 60,
     "use-external-editor": False,
+    "currency-format": [],
 }
 
 BOOL_OPTS = [
@@ -112,10 +113,14 @@ STR_OPTS = [
     "language",
     "locale",
     "unrealized",
+    "currency-format",
 ]
 
 # options that can be specified multiple times
-MULTI_OPTS = ["collapse-pattern"]
+MULTI_OPTS = [
+    "collapse-pattern",
+    "currency-format",
+]
 
 
 FavaOptions = Dict[str, Any]

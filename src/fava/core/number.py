@@ -4,6 +4,7 @@ from typing import Dict
 
 from babel.core import Locale  # type: ignore
 from babel.core import UnknownLocaleError
+import babel.numbers
 from beancount.core.display_context import Precision
 from beancount.core.number import Decimal
 
@@ -48,6 +49,11 @@ class DecimalFormatModule(FavaModule):
         else:
             self.default_pattern = "{:.2f}"
 
+        override_formats = {}
+        for spec in self.ledger.fava_options["currency-format"]:
+            currency, pattern = spec.split(':', 1)
+            override_formats[currency] = pattern
+
         dcontext = self.ledger.options["dcontext"]
         for currency, ccontext in dcontext.ccontexts.items():
             precision = ccontext.get_fractional(Precision.MOST_COMMON)
@@ -57,6 +63,8 @@ class DecimalFormatModule(FavaModule):
             else:
                 pattern = "{:." + str(precision) + "f}"
             self.patterns[currency] = pattern
+        for currency, pattern in override_formats.items():
+            self.patterns[currency] = babel.numbers.parse_pattern(pattern)
 
     def __call__(self, value: Decimal, currency=None) -> str:
         """Format a decimal to the right number of decimal digits with locale.
@@ -71,4 +79,9 @@ class DecimalFormatModule(FavaModule):
         pattern = self.patterns.get(currency, self.default_pattern)
         if not self.locale:
             return pattern.format(value)
-        return pattern.apply(value, self.locale)
+        p = pattern.apply(value, self.locale)
+        if '.' in p and p[-1] == '0':
+            p = p[:-1] + '\xa0'
+        elif '.' not in p:
+            p += '\xa0'
+        return p
